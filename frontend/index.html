@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Lead Scorer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <span>Intelligent Lead Scorer</span>
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="export-btn" id="exportBtn">
+                        <i class="fas fa-download"></i>
+                        Export
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section class="dashboard" id="dashboardSection">
+                <div class="dashboard-header">
+                    <h1>Lead Intelligence Dashboard</h1>
+                    <p>Advanced lead generation and qualification powered by AI</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalLeads">0</h3>
+                            <p>Total Leads</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="averageScore">0</h3>
+                            <p>Average Score</p>
+                        </div>
+                    </div>
+                    <div class="stat-card hot">
+                        <div class="stat-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="hotLeads">0</h3>
+                            <p>Hot Leads</p>
+                        </div>
+                    </div>
+                    <div class="stat-card warm">
+                        <div class="stat-icon">
+                            <i class="fas fa-thermometer-half"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="warmLeads">0</h3>
+                            <p>Warm Leads</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Section -->
+                <div class="input-section">
+                    <div class="input-tabs">
+                        <button class="tab-btn active" data-tab="single">Single Lead</button>
+                        <button class="tab-btn" data-tab="bulk">Bulk Upload</button>
+                    </div>
+
+                    <!-- Single Lead Input -->
+                    <div class="tab-content active" id="singleTab">
+                        <div class="input-form">
+                            <div class="input-group">
+                                <label for="companyDomain">Company Domain</label>
+                                <input type="text" id="companyDomain" placeholder="example.com" />
+                            </div>
+                            <div class="input-group">
+                                <label for="linkedinUrl">LinkedIn URL (Optional)</label>
+                                <input type="text" id="linkedinUrl" placeholder="https://linkedin.com/company/example" />
+                            </div>
+                            <button class="analyze-btn" id="analyzeBtn">
+                                <i class="fas fa-search"></i>
+                                Analyze Lead
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bulk Upload -->
+                    <div class="tab-content" id="bulkTab">
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-content">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <h3>Drop CSV file here or click to upload</h3>
+                                <p>Supported format: domain, company_name, industry (optional)</p>
+                                <input type="file" id="csvFile" accept=".csv" hidden />
+                                <button class="upload-btn" id="uploadBtn">Choose File</button>
+                            </div>
+                        </div>
+                        <div class="processing-status" id="processingStatus" style="display: none;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <p id="statusText">Processing leads...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Score Distribution Chart -->
+                <div class="chart-container">
+                    <h2>Lead Score Distribution</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="scoreChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h2>Lead Results</h2>
+                    <div class="results-actions">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" placeholder="Search companies..." />
+                        </div>
+                        <div class="filter-dropdown">
+                            <select id="qualificationFilter">
+                                <option value="">All Qualifications</option>
+                                <option value="Hot">Hot</option>
+                                <option value="Warm">Warm</option>
+                                <option value="Cold">Cold</option>
+                                <option value="Unqualified">Unqualified</option>
+                            </select>
+                        </div>
+                        <div class="sort-dropdown">
+                            <select id="sortBy">
+                                <option value="score">Sort by Score</option>
+                                <option value="name">Sort by Name</option>
+                                <option value="date">Sort by Date</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Table -->
+                <div class="table-container">
+                    <table class="results-table" id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" /></th>
+                                <th>Company</th>
+                                <th>Domain</th>
+                                <th>Industry</th>
+                                <th>Score</th>
+                                <th>Qualification</th>
+                                <th>Employees</th>
+                                <th>Location</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody">
+                            <!-- Results will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <button class="page-btn" id="prevPage" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span class="page-info" id="pageInfo">Page 1 of 1</span>
+                    <button class="page-btn" id="nextPage" disabled>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Lead Detail Modal -->
+    <div class="modal" id="leadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Lead Details</h2>
+                <button class="close-btn" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Lead details will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary" id="modalClose">Close</button>
+                <button class="btn primary" id="modalAction">Generate Outreach</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Export Leads</h2>
+                <button class="close-btn" id="closeExportModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="export-options">
+                    <div class="option-group">
+                        <label>Export Format</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="format" value="csv" checked> CSV</label>
+                            <label><input type="radio" name="format" value="json"> JSON</label>
+                            <label><input type="radio" name="format" value="excel"> Excel</label>
+                        </div>
+                    </div>
+                    <div class="option-group">
+                        <label>Detail Level</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="detail" value="basic" checked> Basic</label>
+                            <label><input type="radio" name="detail" value="detailed"> Detailed</label>
+                        </div>
+                    </div>
+                    <div class="option-group">
+                        <label>CRM Integration</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="crm" value="" checked> None</label>
+                            <label><input type="radio" name="crm" value="hubspot"> HubSpot</label>
+                            <label><input type="radio" name="crm" value="salesforce"> Salesforce</label>
+                        </div>
+                    </div>
+                    <div class="selected-count">
+                        <span id="selectedCount">0</span> leads selected for export
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary" id="cancelExport">Cancel</button>
+                <button class="btn primary" id="confirmExport">Export</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p id="loadingText">Processing...</p>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <i class="toast-icon"></i>
+            <span class="toast-message"></span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

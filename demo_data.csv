@@ -1,0 +1,31 @@
+domain,company_name,industry
+stripe.com,Stripe,Fintech
+slack.com,Slack,Technology
+zoom.us,Zoom,Technology
+notion.so,Notion,Productivity Software
+airtable.com,Airtable,Database Software
+segment.com,Segment,Analytics
+mixpanel.com,Mixpanel,Analytics
+intercom.com,Intercom,Customer Support
+zendesk.com,Zendesk,Customer Support
+mailchimp.com,Mailchimp,Email Marketing
+hubspot.com,HubSpot,Marketing Automation
+salesforce.com,Salesforce,CRM
+pipedrive.com,Pipedrive,CRM
+asana.com,Asana,Project Management
+trello.com,Trello,Project Management
+monday.com,Monday.com,Work Management
+figma.com,Figma,Design
+canva.com,Canva,Design
+shopify.com,Shopify,E-commerce
+squarespace.com,Squarespace,Website Builder
+wix.com,Wix,Website Builder
+dropbox.com,Dropbox,Cloud Storage
+box.com,Box,Cloud Storage
+atlassian.com,Atlassian,Software Development
+github.com,GitHub,Software Development
+gitlab.com,GitLab,Software Development
+datadog.com,Datadog,Monitoring
+newrelic.com,New Relic,Monitoring
+snowflake.com,Snowflake,Data Warehouse
+databricks.com,Databricks,Data Analytics
